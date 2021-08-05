@@ -6,10 +6,8 @@ from selenium import webdriver, common
 from selenium.webdriver.chrome.options import Options
 
 
-
-LINE_NOTIFY_TOKEN = 'lLgySNv2xbgAxfyub1vDtqNWsG30UfqYmVi47GWbDzF'
+LINE_NOTIFY_TOKEN = 'LINE notify token is here'
 LINE_NOTIFY_API = 'https://notify-api.line.me/api/notify'
-
 
 
 class ConnectWeb():
@@ -35,8 +33,6 @@ class ConnectWeb():
         try:
             browser = self.browser
             browser.get(self.url)
-            print(browser.title)
-            print('get browser')
 
         except common.exceptions.TimeoutException():
             print('Time out')
@@ -47,11 +43,15 @@ class ConnectWeb():
         browser.find_element_by_name('userid').send_keys(self.user_id)
         browser.find_element_by_name('password').send_keys(self.password)
         browser.find_element_by_class_name('btn-lg').click()
-        title = browser.title
-        browser.get('https://www.e2r.jp/eARTH/e2r/user/pageset/Pageset?deliverID=79&pageID=40')
-        print(title)
+        browser.find_element_by_xpath('/html/body/div/div[3]/div[2]/div/ul[1]/li[1]/a').click()
+        # browser.get('get user summer intern page')
     
     def check(self):
+        """
+        Returns:
+            result (bool): if schedule is full return False,
+                           else return true.
+        """
         browser = self.browser
         schedules = browser.find_elements_by_class_name('schedule')
         for i in range(len(schedules)):
@@ -60,8 +60,11 @@ class ConnectWeb():
             else:
                 return True
     
-    def send_line_notify(self, notification_message):
-        # notification_message = '空席ができました。'
+    def send_line_notify(self, notification_message: str) -> None:
+        """
+        Args:
+            notification_message (str): Message to send to LINE.
+        """
         headers = {'Authorization': "Bearer " + LINE_NOTIFY_TOKEN}
         data = {"message": notification_message}
         requests.post(LINE_NOTIFY_API, headers=headers, data=data)
@@ -75,7 +78,7 @@ class ConnectWeb():
         
 
 if __name__ == '__main__':
-    connect = ConnectWeb('https://www.e2r.jp/ja/kubota2023/', 'kb153376', 'basuke811')
+    connect = ConnectWeb('https://www.e2r.jp/ja/kubota2023/', 'user_id', 'password')
     connect.fetch_page()
     connect.login()
     result = connect.check()

@@ -14,5 +14,6 @@ Pythonのライブラリであるselenium, chromedriver-binaryを使用してお
 
 ## LINE NOTIFY API
 LINEのNotify APIを用いて、空席ができた場合のみ通知を行う。
+
 https://notify-bot.line.me/ja/
 
